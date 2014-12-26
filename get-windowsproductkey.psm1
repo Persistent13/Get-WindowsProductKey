@@ -23,7 +23,7 @@
 	Get-WindowsProductKey
 	
 	
-	Computer     : EXAMPLE1
+	Node         : EXAMPLE1
 	Hostname     : EXAMPLE1
 	Caption      : Microsoft Windows 7 Enterprise 
 	CSDVersion   : Service Pack 1
@@ -40,7 +40,7 @@
 	C:\PS> Get-WindowsProductKey -Computers EXAMPLE2, EXAMPLE3
     
     
-    Computer     : EXAMPLE2
+    Node         : EXAMPLE2
     Hostname     : EXAMPLE2
     Caption      : Microsoft Windows Server 2012 Standard
     CSDVersion   : 
@@ -50,7 +50,7 @@
     ProductID    : 12345-678-9876543-21234
     ProductKey   : ABCDE-FGHIJ-KLMNO-PQRST-UVWXY
     
-    Computer     : EXAMPLE3
+    Node         : EXAMPLE3
     Hostname     : EXAMPLE3
     Caption      : Microsoft Windows 8 Enterprise
     CSDVersion   : 
@@ -68,7 +68,7 @@
     C:\PS> Get-WindowsProductKey -Computers 10.0.26.182, fe80::c9a5:ed01:f6d4:3890%10
     
     
-	Computer     : EXAMPLE4
+	Node         : EXAMPLE4
 	Hostname     : EXAMPLE4
 	Caption      : Microsoft Windows Server 2008 R2 Standard
 	CSDVersion   : Service Pack 1
@@ -78,7 +78,7 @@
 	ProductID    : 12345-678-9876543-21234
 	ProductKey   : ABCDE-FGHIJ-KLMNO-PQRST-UVWXY
     
-    Computer     : EXAMPLE5
+    Node         : EXAMPLE5
 	Hostname     : EXAMPLE5
 	Caption      : Microsoft Windows Server 2008 R2 Standard
 	CSDVersion   : Service Pack 1
@@ -96,7 +96,7 @@
 	(
 		[Parameter(Mandatory=$false,
 					Position=0)]
-		[Alias("Computer","Server","Servers")]
+		[Alias("Computer","Server","Servers","Node")]
 		[string[]]$Computers = $env:COMPUTERNAME
 	)
 	foreach($computer in $Computers)
@@ -132,7 +132,7 @@
 			$decodedChars | % { $str+=$_ }
 			$win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem
 			$object = New-Object Object
-			$object | Add-Member Noteproperty Computer -value $computer
+			$object | Add-Member Noteproperty Node -value $computer
 			$object | Add-Member Noteproperty Hostname -value $win32os.CSName
 			$object | Add-Member Noteproperty Caption -value $win32os.Caption
 			$object | Add-Member Noteproperty CSDVersion -value $win32os.CSDVersion
