@@ -1,4 +1,4 @@
-﻿function Get-WindowsProductKey
+function Get-WindowsProductKey
 {
 <#
     .SYNOPSIS
@@ -6,38 +6,38 @@
     Retrives a Windows license key.
     .DESCRIPTION
     
-	Retrives a Windows license key from local and remote computers
-	via a WMI call to the registry along with additonal information
-	from the OperatingSystem WMI class.
+    Retrives a Windows license key from local and remote computers
+    via a WMI call to the registry along with additonal information
+    from the OperatingSystem WMI class.
     .PARAMETER Computers
     
-	The list of computers to get the license key information for.
+    The list of computers to get the license key information for.
     .INPUTS
     
     Strings that are placed into an array to process.
     .OUTPUTS
     
     Returns an object with operating system and licensing data.
-	.EXAMPLE
-    
-	Get-WindowsProductKey
-	
-	
-	Node         : EXAMPLE1
-	Hostname     : EXAMPLE1
-	Caption      : Microsoft Windows 7 Enterprise 
-	CSDVersion   : Service Pack 1
-	OSArch       : 64-bit
-	BuildNumber  : 7601
-	RegisteredTo : Windows User
-	ProductID    : 12345-678-9876543-21234
-	ProductKey   : ABCDE-FGHIJ-KLMNO-PQRST-UVWXY
-	
-    
-	Returns the licensing information for the local computer.
     .EXAMPLE
     
-	C:\PS> Get-WindowsProductKey -Computers EXAMPLE2, EXAMPLE3
+    Get-WindowsProductKey
+	
+	
+    Node         : EXAMPLE1
+    Hostname     : EXAMPLE1
+    Caption      : Microsoft Windows 7 Enterprise 
+    CSDVersion   : Service Pack 1
+    OSArch       : 64-bit
+    BuildNumber  : 7601
+    RegisteredTo : Windows User
+    ProductID    : 12345-678-9876543-21234
+    ProductKey   : ABCDE-FGHIJ-KLMNO-PQRST-UVWXY
+	
+    
+    Returns the licensing information for the local computer.
+    .EXAMPLE
+    
+    C:\PS> Get-WindowsProductKey -Computers EXAMPLE2, EXAMPLE3
     
     
     Node         : EXAMPLE2
@@ -68,25 +68,25 @@
     C:\PS> Get-WindowsProductKey -Computers 10.0.26.182, fe80::c9a5:ed01:f6d4:3890%10
     
     
-	Node         : EXAMPLE4
-	Hostname     : EXAMPLE4
-	Caption      : Microsoft Windows Server 2008 R2 Standard
-	CSDVersion   : Service Pack 1
-	OSArch       : 64-bit
-	BuildNumber  : 7601
-	RegisteredTo : Windows User
-	ProductID    : 12345-678-9876543-21234
-	ProductKey   : ABCDE-FGHIJ-KLMNO-PQRST-UVWXY
+    Node         : EXAMPLE4
+    Hostname     : EXAMPLE4
+    Caption      : Microsoft Windows Server 2008 R2 Standard
+    CSDVersion   : Service Pack 1
+    OSArch       : 64-bit
+    BuildNumber  : 7601
+    RegisteredTo : Windows User
+    ProductID    : 12345-678-9876543-21234
+    ProductKey   : ABCDE-FGHIJ-KLMNO-PQRST-UVWXY
     
     Node         : EXAMPLE5
-	Hostname     : EXAMPLE5
-	Caption      : Microsoft Windows Server 2008 R2 Standard
-	CSDVersion   : Service Pack 1
-	OSArch       : 64-bit
-	BuildNumber  : 7601
-	RegisteredTo : Windows User
-	ProductID    : 12345-678-9876543-21234
-	ProductKey   : ABCDE-FGHIJ-KLMNO-PQRST-UVWXY
+    Hostname     : EXAMPLE5
+    Caption      : Microsoft Windows Server 2008 R2 Standard
+    CSDVersion   : Service Pack 1
+    OSArch       : 64-bit
+    BuildNumber  : 7601
+    RegisteredTo : Windows User
+    ProductID    : 12345-678-9876543-21234
+    ProductKey   : ABCDE-FGHIJ-KLMNO-PQRST-UVWXY
     
     
     IPv6 and IPv4 addresses can also be used.
