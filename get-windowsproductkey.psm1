@@ -97,7 +97,10 @@ function Get-WindowsProductKey
 		[Parameter(Mandatory=$false,
 					Position=0)]
 		[Alias("Computer","Server","Servers","Node")]
-		[string[]]$Computers = $env:COMPUTERNAME
+		[string[]]$Computers = $env:COMPUTERNAME,
+        [Parameter(Mandatory=$false,
+                    Position=1)]
+        $Credentials
 	)
 	foreach($computer in $Computers)
 	{
@@ -128,20 +131,27 @@ function Get-WindowsProductKey
 					}
 				}
 			}
-			$STR = ''    
+			$STR = ''
 			$decodedChars | % { $str+=$_ }
-			$win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem
-			$object = New-Object Object
-			$object | Add-Member Noteproperty Node -value $computer
-			$object | Add-Member Noteproperty Hostname -value $win32os.CSName
-			$object | Add-Member Noteproperty Caption -value $win32os.Caption
-			$object | Add-Member Noteproperty CSDVersion -value $win32os.CSDVersion
-			$object | Add-Member Noteproperty OSArch -value $win32os.OSArchitecture
-			$object | Add-Member Noteproperty BuildNumber -value $win32os.BuildNumber
-			$object | Add-Member Noteproperty RegisteredTo -value $win32os.RegisteredUser
-			$object | Add-Member Noteproperty ProductID -value $win32os.SerialNumber
-			$object | Add-Member Noteproperty ProductKey -value $STR
-			Write-Output $object
+            if(!($Computers -eq $env:COMPUTERNAME))
+            {
+    	        $win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem -Credential $Credentials
+            }
+            else
+            {
+                $win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem
+            }
+		    $object = New-Object Object
+		    $object | Add-Member Noteproperty Node -value $computer
+		    $object | Add-Member Noteproperty Hostname -value $win32os.CSName
+		    $object | Add-Member Noteproperty Caption -value $win32os.Caption
+		    $object | Add-Member Noteproperty CSDVersion -value $win32os.CSDVersion
+		    $object | Add-Member Noteproperty OSArch -value $win32os.OSArchitecture
+		    $object | Add-Member Noteproperty BuildNumber -value $win32os.BuildNumber
+		    $object | Add-Member Noteproperty RegisteredTo -value $win32os.RegisteredUser
+		    $object | Add-Member Noteproperty ProductID -value $win32os.SerialNumber
+		    $object | Add-Member Noteproperty ProductKey -value $STR
+		    Write-Output $object
 		}
 		catch [system.exception]
 		{
