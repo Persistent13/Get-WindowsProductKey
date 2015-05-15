@@ -94,19 +94,33 @@ function Get-WindowsProductKey
 	[cmdletbinding()]
 	param
 	(
-		[Parameter(Mandatory=$false,
-					Position=0)]
-		[Alias("Computer","Server","Servers","Node")]
-		[string[]]$Computers = $env:COMPUTERNAME,
-        [Parameter(Mandatory=$false,
-                    Position=1)]
-        $Credentials
+		[Parameter(
+        Mandatory=$false,
+		Position=0)]
+		[Alias("Computer","Server","Node")]
+		[string[]]
+        $ComputerName = $env:COMPUTERNAME,
+        [Parameter(
+        Mandatory=$false,
+        Position=1)]
+        [PSCredential]
+        $Credential = [PSCredential]::Empty
 	)
-	foreach($computer in $Computers)
+
+	foreach($computer in $ComputerName)
 	{
 		try
 		{
-			$Reg = [WMIClass] ("\\" + $computer + "\root\default:StdRegProv")
+            if(!($computer -eq $env:COMPUTERNAME))
+            {
+                $reg = Get-WmiObject -ComputerName $computer -List -Namespace "root\cimv2" -Credential $Credential | Where-Object {$_.Name -eq "StdRegProv"}
+    	        $win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem -Credential $Credential
+            }
+            else
+            {
+                $reg = Get-WmiObject -ComputerName $computer -List -Namespace "root\cimv2" | Where-Object {$_.Name -eq "StdRegProv"}
+                $win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem
+            }
 			$values = [byte[]]($reg.getbinaryvalue(2147483650,"SOFTWARE\Microsoft\Windows NT\CurrentVersion\DefaultProductKey","DigitalProductId").uvalue)
 			$lookup = [char[]]("B","C","D","F","G","H","J","K","M","P","Q","R","T","V","W","X","Y","2","3","4","6","7","8","9")
 			$keyStartIndex = [int]52;
@@ -133,14 +147,7 @@ function Get-WindowsProductKey
 			}
 			$STR = ''
 			$decodedChars | % { $str+=$_ }
-            if(!($Computers -eq $env:COMPUTERNAME))
-            {
-    	        $win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem -Credential $Credentials
-            }
-            else
-            {
-                $win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem
-            }
+
 		    $object = New-Object Object
 		    $object | Add-Member Noteproperty Node -value $computer
 		    $object | Add-Member Noteproperty Hostname -value $win32os.CSName
@@ -155,12 +162,7 @@ function Get-WindowsProductKey
 		}
 		catch [system.exception]
 		{
-			<#
-			I hate, hate, hate this.
-			If you know a better way of returning the first error please tell me.
-			github @Persistent13
-			#>
-			Write-Error $Error[0]
+			Write-Error $_
 		}
 	}
 }
