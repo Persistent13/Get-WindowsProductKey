@@ -94,12 +94,15 @@ function Get-WindowsProductKey
 	[cmdletbinding()]
 	param
 	(
-		[Parameter(Mandatory=$false,
-					Position=0)]
+		[Parameter(
+        Mandatory=$false,
+		Position=0,
+        ValueFromPipeline = $true,
+        ValueFromPipelineByPropertyName=$true)]
 		[Alias("Computer","Server","Servers","Node")]
-		[string[]]$Computers = $env:COMPUTERNAME
+		[string[]]$Name = $env:COMPUTERNAME
 	)
-	foreach($computer in $Computers)
+	foreach($computer in $Name)
 	{
 		try
 		{
