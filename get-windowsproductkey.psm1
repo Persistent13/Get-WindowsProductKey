@@ -113,12 +113,12 @@ function Get-WindowsProductKey
 		{
             if(!($computer -eq $env:COMPUTERNAME))
             {
-                $reg = Get-WmiObject -ComputerName $computer -List -Namespace "root\cimv2" -Credential $Credential | Where-Object {$_.Name -eq "StdRegProv"}
+                $reg = Get-WmiObject -ComputerName $computer -List -Namespace "root\default" -Credential $Credential | Where-Object {$_.Name -eq "StdRegProv"}
     	        $win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem -Credential $Credential
             }
             else
             {
-                $reg = Get-WmiObject -ComputerName $computer -List -Namespace "root\cimv2" | Where-Object {$_.Name -eq "StdRegProv"}
+                $reg = Get-WmiObject -ComputerName $computer -List -Namespace "root\default" | Where-Object {$_.Name -eq "StdRegProv"}
                 $win32os = Get-WmiObject -ComputerName $computer -Class Win32_OperatingSystem
             }
 			$values = [byte[]]($reg.getbinaryvalue(2147483650,"SOFTWARE\Microsoft\Windows NT\CurrentVersion\DefaultProductKey","DigitalProductId").uvalue)
